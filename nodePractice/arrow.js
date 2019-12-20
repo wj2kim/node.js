@@ -23,3 +23,5 @@ const thingsDone = todos.filter((todo) => todo.isDone ===true);
 
 console.log(thingsDone);
 
+// practicing arrow function
+
