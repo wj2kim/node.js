@@ -9,7 +9,6 @@ var app = http.createServer(function(request,response){
 
     if(pathname === '/'){
       if(queryData.id === undefined){
-
         fs.readdir('./data',(err,filelist)=>{
           var title = 'Welcome';
           var description = 'Hello, Node.js';
@@ -34,7 +33,7 @@ var app = http.createServer(function(request,response){
             <p>${description}</p>
           </body>
           </html>
-          `
+          `;
           response.writeHead(200);
           response.end(template);
         });
