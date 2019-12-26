@@ -1,14 +1,14 @@
-// var promise1=new Promise(function(result,reject){
-//     setTimeout(function(){
-//         result('foo');
-//     }, 300);
-// });
+var promise1=new Promise(function(result,reject){
+    setTimeout(function(){
+        result('foo');
+    }, 300);
+});
 
-// promise1.then(function(value){
-//     console.log(value);
-// });
+promise1.then(function(value){
+    console.log(value);
+});
 
-// console.log(promise1);
+console.log(promise1);
 
 const myFirstPromise=new Promise((resolve,reject)=>{
     setTimeout(function(){resolve("Success!")},250);
@@ -27,4 +27,6 @@ myFirstPromise.then((successMessage)=>{
 //         xhr.send();
 //     });
 // }
+
+
 
