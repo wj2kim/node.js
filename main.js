@@ -54,7 +54,7 @@ var app = http.createServer(function(request,response){
             var list = templateList(filelist);
             var template = templateHTML(title, list,
               `<h2>${title}</h2>${description}`,
-              `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`);
+              `<a href="/create">create</a> <a href="/update?id=${title}">update</a> <form action="/delete_process method="post"><input type="hidden" name="id" value="${title}"><input type="submit" value="delete"></form>`);
             response.writeHead(200);
             response.end(template);
           });
@@ -94,7 +94,7 @@ var app = http.createServer(function(request,response){
             response.end();
           });
       });
-    }else if(pathname === '/update'){
+    }else if(pathname === '/update'){ 
       fs.readdir('./data', function(error, filelist){
         fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description){
           var title = queryData.id;
@@ -125,22 +125,32 @@ var app = http.createServer(function(request,response){
       request.on('end', function(){
           var post = qs.parse(body);
           var id = post.id;
-          console.log(id);
           var title = post.title;
-          console.log(title);
           var description = post.description
-          console.log(description);
           fs.rename(`data/${id}`,`data/${title}`,(err)=>{
             if(err) throw err;
             fs.writeFile(`data/${title}`,description,'utf-8',(err)=>{
               if(err) throw err;
+              // response.writeHaed(302,{Location:'/'}) 페이지 리다이렉트 코드
               response.writeHead(302,{Location:`/?id=${title}`});
               response.end();
             });
-            // response.writeHaed(302,{Location:'/'}) 페이지 리다이렉트 코드
           });
       });
-    }else {
+      }else if(pathname === '/delete_process'){
+        let confirm = confirm("정말 삭제하시겠습니까?");
+        if (confirm){
+          var body='';
+          request.on('data',(data)=>{
+            body+=data;
+          });
+          request.on('end',()=>{
+            var post = qs.parse(body);
+            var id = post.id;
+            
+          })
+        }
+       } else {
       response.writeHead(404);
       response.end('Not found');
     }
