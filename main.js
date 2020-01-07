@@ -1,23 +1,10 @@
 var http = require('http');
-var fs = require('fs');
 var url = require('url');
 var qs = require('querystring');
 var template = require('./lib/template.js');
-var path = require('path');
-var sanitizeHtml = require('sanitize-html');
+var db = require('./lib/db.js');
+var topic = require('./lib/topic.js');
 
-// using 'Mysql' as project dependency
-let mysql = require('mysql');
-// mysql과의 연결 매개변수 = 1.host 2.user 3.password 4.database
-let db = mysql.createConnection({
-   host:'localhost',
-   user:'root',
-   password:'2472',
-   database:'opentutorials',
-});
-// mysql과 연결 
-db.connect();
- 
  
 var app = http.createServer(function(request,response){
     var _url = request.url;
@@ -25,17 +12,7 @@ var app = http.createServer(function(request,response){
     var pathname = url.parse(_url, true).pathname;
     if(pathname === '/'){
       if(queryData.id === undefined){
-        db.query(`SELECT * FROM topic`, function(error,topics){
-          var title = 'Welcome';
-          var description = 'Hello, Node.js';
-          var list = template.list(topics);
-          var html = template.HTML(title, list,
-            `<h2>${title}</h2>${description}`,
-            `<a href="/create">create</a>`
-          );
-          response.writeHead(200);
-          response.end(html);
-        });
+        topic.home(request, response);
       } else {
         db.query(`SELECT * FROM topic`, function(error,topics){
          if(error){
@@ -45,7 +22,6 @@ var app = http.createServer(function(request,response){
            if(error2){
              throw error2;
            }
-           console.log(topic);
           var title = topic[0].title;
           var description = topic[0].description;
           var list = template.list(topics);
