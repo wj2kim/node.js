@@ -4,6 +4,7 @@ var qs = require('querystring');
 var template = require('./lib/template.js');
 var db = require('./lib/db.js');
 var topic = require('./lib/topic.js');
+const author = require('./lib/author.js');
 
  
 var app = http.createServer(function(request,response){
@@ -144,7 +145,17 @@ var app = http.createServer(function(request,response){
             response.end();
           });
       });
-    } else {
+    }else if(pathname === '/author') {
+      author.home(request, response);
+    }else if(pathname === '/create_author_process'){
+      author.create_process(request, response);
+    }else if(pathname === '/author/update'){
+      author.update(request, response);
+    }else if(pathname === '/author/delete_process'){
+      author.delete_process(request, response);
+    }else if(pathname === '/author/update_process'){
+      author.update_process(request, response);
+    }else {
       response.writeHead(404);
       response.end('Not found');
     }
